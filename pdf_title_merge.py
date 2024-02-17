@@ -1,6 +1,5 @@
 import glob
 import os
-from Levenshtein import ratio
 from create_excel_pdf import get_bluereport_pdf_dataframe
 from main import EXCEL_FILE_PATH, PDF_ARTICLE_FOLDER
 import pandas as pd
@@ -58,11 +57,8 @@ for index, row in unknown_pdf_path.iterrows():
     unknown_pdf_path.at[index, 'Pdf file Path'] = most_similar_filename
     unknown_pdf_path.at[index, 'Similarity Pdf file name and titel'] = max_similarity
 
+# Manual drop id that do not have the correct article
+unknown_pdf_path = unknown_pdf_path[unknown_pdf_path['ID'] != 1278327307]
 
-df_sorted = unknown_pdf_path.sort_values(by='Similarity Pdf file name and titel')
-
-
-known_pdf_path = bluereport_pdf_dataframe[~bluereport_pdf_dataframe['Pdf file Path'].isna()]
-unknown_pdf_path = bluereport_pdf_dataframe[bluereport_pdf_dataframe['Pdf file Path'].isna()]
-
-a =1
+PDF_PATH_DATAFRAME = pd.concat([known_pdf_path, unknown_pdf_path], axis=0)
+PDF_PATH_DATAFRAME['Titel'] = PDF_PATH_DATAFRAME['Titel'].str.lower()
