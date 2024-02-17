@@ -1,16 +1,5 @@
 from pdf_title_merge import PDF_PATH_DATAFRAME
-import pdfplumber
-import re
-
-
-def extract_text_from_pdf(path):
-    text = ""
-    with pdfplumber.open(path) as pdf:
-        for page in pdf.pages:
-            text += page.extract_text()
-    text = text.lower()
-
-    return text
+import pypdfium2 as pdfium
 
 
 def clean_full_text(text, titel):
@@ -23,16 +12,31 @@ def clean_full_text(text, titel):
     if index_of_first != -1 and index_of_second != -1 and index_of_second > index_of_first:
         # Remove the first occurrence and include the second occurrence and everything after it
         text = text[:index_of_first] + text[index_of_second:]
+    if index_of_first != -1:
+        text = text[index_of_first:]
 
-    index_of_as = text.find(titel)
-    text = text[index_of_as:]
     text = text.replace("nur zum internen gebrauch ", "")
 
     return text
 
 
-for index, row in PDF_PATH_DATAFRAME.iterrows():
+def pdfium_get_text(data: bytes) -> str:
+    text = ""
+    pdf = pdfium.PdfDocument(data)
+    for i in range(len(pdf)):
+        page = pdf.get_page(i)
+        textpage = page.get_textpage()
+        text += textpage.get_text_range() + "\n"
+    text = text.lower()
+
+    return text
+
+
+full_text_df = PDF_PATH_DATAFRAME
+for index, row in full_text_df.iterrows():
     pdf_path = row['Pdf file Path']  # Replace with the path to your PDF file
-    full_text = extract_text_from_pdf(pdf_path)
+    full_text = pdfium_get_text(pdf_path)
     clean_text = clean_full_text(full_text, row['Titel'])
-    # print(full_text)
+    full_text_df.at[index, 'full text'] = clean_text
+
+a = 1
