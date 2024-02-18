@@ -1,13 +1,13 @@
 import glob
 import os
-from create_excel_pdf import get_bluereport_pdf_dataframe
-from main import EXCEL_FILE_PATH, PDF_ARTICLE_FOLDER
+from Executions.create_excel_pdf_web import get_bluereport_pdf_dataframe
+from main import EXCEL_FILE_PATH_RAW, PDF_ARTICLE_FOLDER
 import pandas as pd
 import re
 from fuzzywuzzy import fuzz
 
 
-bluereport_pdf_dataframe = get_bluereport_pdf_dataframe(EXCEL_FILE_PATH)
+bluereport_pdf_dataframe = get_bluereport_pdf_dataframe(EXCEL_FILE_PATH_RAW)
 pdf_article_names_path = glob.glob(PDF_ARTICLE_FOLDER + '/*.pdf')
 pdf_article_names = [os.path.basename(file)[:-4].replace('_', ' ') for file in pdf_article_names_path]
 special_chars_pattern = re.compile(r'[^a-zA-Z0-9\säöüÄÖÜß]')

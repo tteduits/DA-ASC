@@ -1,19 +1,13 @@
 import pandas as pd
-from main import PDF_LINKS_EXCEL, EXCEL_FILE_PATH
+from main import PDF_LINKS_EXCEL, EXCEL_FILE_PATH_RAW, WEB_SCRAPE_EXCEL, MINIMAL_OCCURENCES
+from Functions.excel_pdf_web_functions import get_bluereport_pdf_dataframe, create_web_scraping_df
 
 
-def get_bluereport_pdf_dataframe(excel_path):
-    dataframe = pd.read_excel(excel_path)
-    dataframe.dropna(subset=['URL', 'Tonalität'], inplace=True)
-    dataframe['Pdf Titel'] = dataframe['Titel'].str.replace(' ', '_')
-    dataframe = dataframe[dataframe['URL'].str.contains('app.bluereport.net')]
-    dataframe.drop_duplicates(subset='ID', inplace=True)
-    return dataframe
-
-
-bluereport_pdf_files = get_bluereport_pdf_dataframe(EXCEL_FILE_PATH)
+bluereport_pdf_files = get_bluereport_pdf_dataframe(EXCEL_FILE_PATH_RAW)
 bluereport_pdf_files = bluereport_pdf_files['URL']
 bluereport_pdf_files.reset_index(drop=True, inplace=True)
+
+web_scrape_df = create_web_scraping_df(EXCEL_FILE_PATH_RAW, MINIMAL_OCCURENCES)
 
 # Create new dataframe with only the URLS
 num_col_new_df = len(bluereport_pdf_files) // 50 + 1
@@ -34,3 +28,4 @@ for i in range(num_col_new_df):
     final_df['URL' + str(i)] = subset_df
 
 final_df.to_excel(PDF_LINKS_EXCEL, index=False)
+web_scrape_df.to_excel(WEB_SCRAPE_EXCEL, index=False)

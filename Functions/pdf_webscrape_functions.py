@@ -1,5 +1,6 @@
-from pdf_title_merge import PDF_PATH_DATAFRAME
 import pypdfium2 as pdfium
+import requests
+from bs4 import BeautifulSoup
 
 
 def clean_full_text(text, titel):
@@ -16,6 +17,7 @@ def clean_full_text(text, titel):
         text = text[index_of_first:]
 
     text = text.replace("nur zum internen gebrauch ", "")
+    text = text.lower()
 
     return text
 
@@ -32,11 +34,22 @@ def pdfium_get_text(data: bytes) -> str:
     return text
 
 
-full_text_df = PDF_PATH_DATAFRAME
-for index, row in full_text_df.iterrows():
-    pdf_path = row['Pdf file Path']  # Replace with the path to your PDF file
-    full_text = pdfium_get_text(pdf_path)
-    clean_text = clean_full_text(full_text, row['Titel'])
-    full_text_df.at[index, 'full text'] = clean_text
+def do_web_scrape(url, quelle, titel):
+    response = requests.get(url)
 
-a = 1
+    # Check if the request was successful (status code 200)
+    if response.status_code != 200:
+        return None
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    if quelle == 'merkur.de':
+        paragraphs = soup.find_all(['h3', 'h2', 'p', 'li'], class_=['id-StoryElement-factBox-headline', 'id-StoryElement-factBox-paragraph', 'id-StoryElement-paragraph', 'id-StoryElement-crosshead', 'id-StoryElement-list-item', 'id-StoryElement-leadText'])
+        full_text = titel + ' '
+    else:
+        return None
+
+    for paragraph in paragraphs:
+        full_text = full_text + paragraph.get_text(strip=True) + " "
+
+    return full_text
