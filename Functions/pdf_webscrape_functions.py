@@ -46,6 +46,8 @@ def do_web_scrape(url, quelle, titel):
     if quelle == 'merkur.de':
         paragraphs = soup.find_all(['h3', 'h2', 'p', 'li'], class_=['id-StoryElement-factBox-headline', 'id-StoryElement-factBox-paragraph', 'id-StoryElement-paragraph', 'id-StoryElement-crosshead', 'id-StoryElement-list-item', 'id-StoryElement-leadText'])
         full_text = titel + ' '
+    elif quelle == '':
+        a = 1
     else:
         return None
 

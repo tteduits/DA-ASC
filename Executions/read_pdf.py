@@ -9,5 +9,5 @@ for index, row in full_text_df.iterrows():
     clean_text = clean_full_text(full_text, row['Titel'])
     full_text_df.at[index, 'full text'] = clean_text
 
-full_text_df.to_excel('D:\\MasterThesisTijs\\Excel\\excel_full_text.xlsx')
+full_text_df.to_excel('D:\\MasterThesisTijs\\Excel\\excel_full_text_pdf.xlsx')
 
