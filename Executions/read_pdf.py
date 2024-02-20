@@ -1,5 +1,5 @@
 from merge_title_pdf import PDF_PATH_DATAFRAME
-from Functions.pdf_webscrape_functions import pdfium_get_text, clean_full_text
+from Functions.pdf_read_functions import pdfium_get_text, clean_full_text
 
 
 full_text_df = PDF_PATH_DATAFRAME
