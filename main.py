@@ -1,6 +1,6 @@
 EXTERNAL_DISK = 'D:\\MasterThesisTijs\\PdfFiles'
 DATA_FOLDER = 'C:\\Users\\tijst\\OneDrive\\Bureaublad\\DataMasterThesis\\'
-EXCEL_FOLDER = 'C:\\Users\\tijst\\OneDrive\\Bureaublad\\DataMasterThesis\\Excel\\'
+EXCEL_FOLDER = 'D:\\MasterThesisTijs\\Excel'
 SEM_EVAL_PATH = 'C:\\Users\\tijst\\OneDrive\\Bureaublad\\DataMasterThesis\\SemEval\\'
 PDF_LINKS_EXCEL = 'C:\\Users\\tijst\\OneDrive\\Bureaublad\\DataMasterThesis\\Excel\\PDF_files\\'
 FULL_TEXT_FOLDER = 'C:\\Users\\tijst\\OneDrive\\Bureaublad\\DataMasterThesis\\Excel\\FullText\\'

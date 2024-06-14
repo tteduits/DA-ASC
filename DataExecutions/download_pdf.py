@@ -3,9 +3,7 @@ import time
 import pandas as pd
 import os
 import shutil
-from pathlib import Path
-from main import PDF_LINKS_EXCEL, COL_LENGTH, ROW_LENGTH, EXCEL_FOLDER, EXTERNAL_DISK
-from DataFunctions.pdf_read_functions import clean_full_text
+from main import PDF_LINKS_EXCEL, EXCEL_FOLDER, EXTERNAL_DISK
 
 
 CHECK_COORDINATES = False

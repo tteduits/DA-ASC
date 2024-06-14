@@ -54,14 +54,16 @@ def tokenize_sentences(text):
     return sent_tokenize(text)
 
 
-def calculate_tf_idf_scores(corpus):
+def calculate_tf_idf_scores(train_corpus):
     nltk.download('stopwords')
     german_stop_words = stopwords.words('german')
     vectorizer = TfidfVectorizer(stop_words=german_stop_words)
-    tfidf_matrix = vectorizer.fit_transform(corpus)
+    tfidf_matrix_train = vectorizer.fit_transform(train_corpus)
+
     with open(DATA_FOLDER+"\\tfidf_summarizer.pkl", "wb") as f:
         pickle.dump(vectorizer, f)
-    return tfidf_matrix, vectorizer.get_feature_names_out()
+
+    return tfidf_matrix_train, vectorizer.get_feature_names_out()
 
 
 def calculate_sentence_scores(tf_idf_matrix):
@@ -107,5 +109,5 @@ def create_fasttext_format(df, output_file, label_columns):
             labels_str = '__label__' + 'Aspect_' + '_'.join(row['aspect']) + '_'
             labels_str = labels_str + 'Sentiment_' + '_'.join(row['sentiment'])
 
-            line = labels_str + ' ' + row['tf_idf_sum'] + '\n'
+            line = labels_str + ' ' + row['lemma_text'] + '\n'
             f.write(line)

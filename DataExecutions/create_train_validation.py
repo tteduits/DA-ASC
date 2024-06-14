@@ -1,35 +1,44 @@
-import pandas as pd
 from main import EXCEL_FOLDER
+import pandas as pd
 from sklearn.model_selection import train_test_split
-import random
 
 
-combined_data = pd.read_excel(EXCEL_FOLDER + "\\combined_data.xlsx")
-combined_data = combined_data.drop(combined_data.columns[0], axis=1)
-combined_data['aspect'] = combined_data['aspect'].apply(eval)
-df_single_value = combined_data[combined_data['aspect'].apply(lambda x: len(x) == 1)]
-df_multiple_values = combined_data[combined_data['aspect'].apply(lambda x: len(x) > 1)]
+data = pd.read_excel(EXCEL_FOLDER +'\\raw_output.xlsx')
+data['sentiment'] = data['sentiment'].map({
+    0: "negativ",
+    1: "leicht negativ",
+    2: "ausgeglichen",
+    3: "leicht positiv",
+    4: "positiv"}
+)
 
-unique_aspects = df_single_value['Thema'].unique()
+data['sentiment'] = data['sentiment'].replace({'negativ': 0, 'leicht negativ': 0, 'ausgeglichen': 1, 'positiv': 2, 'leicht positiv': 2})
+THEME_MAPPINGS = {
+    0: "Ländliche Entwicklung, Digitale Innovation",
+    1: "Lebensmittelsicherheit, Tiergesundheit",
+    2: "Landwirtschaftliche Erzeugung, Gartenbau, Agrarpolitik",
+    3: "Gesundheitlicher Verbraucherschutz, Ernährung, Produktsicherheit",
+    4: "Sonstiges",
+    5: "Wald, Nachhaltigkeit, Nachwachsende Rohstoffe",
+    6: "EU-Angelegenheiten, Internationale Zusammenarbeit, Fischerei",
+    7: "Agrarmärkte, Ernährungswirtschaft, Export",
+    8: "Zentralabteilung"
+}
 
-train_df = pd.DataFrame()
-test_df = pd.DataFrame()
-for topic in unique_aspects:
-    topic_df = combined_data[combined_data['Thema'] == topic].copy()
+data['aspect'] = data['aspect'].map(THEME_MAPPINGS)
 
-    train_topic_df, test_topic_df = train_test_split(topic_df, train_size=0.8, stratify=topic_df['sentiment'], random_state=42)
-    train_df = pd.concat([train_df, train_topic_df], ignore_index=True)
-    test_df = pd.concat([test_df, test_topic_df], ignore_index=True)
+splitted_data_test = data.groupby('aspect').apply(lambda x: train_test_split(x, test_size=0.2, stratify=x['sentiment']))
 
-df_part1 = df_multiple_values.sample(frac=0.5, random_state=42)
-df_part2 = df_multiple_values.drop(df_part1.index)
+train_data = pd.concat([item[0] for item in splitted_data_test])
+test_data = pd.concat([item[1] for item in splitted_data_test])
 
-df_part1.reset_index(drop=True, inplace=True)
-df_part2.reset_index(drop=True, inplace=True)
+splitted_data_train = train_data.groupby('aspect').apply(lambda x: train_test_split(x, test_size=0.2, stratify=x['sentiment']))
 
-train_df = pd.concat([train_df, df_part2], ignore_index=True)
-test_df = pd.concat([test_df, df_part1], ignore_index=True)
+train_data = pd.concat([item[0] for item in splitted_data_train])
+validation_data = pd.concat([item[1] for item in splitted_data_train])
+
+test_data.to_excel(EXCEL_FOLDER + "\\test_data.xlsx", index=False)
+train_data.to_excel(EXCEL_FOLDER + "\\train_data.xlsx", index=False)
+validation_data.to_excel(EXCEL_FOLDER + "\\validation_data.xlsx", index=False)
+
 a = 1
-train_df.to_excel(EXCEL_FOLDER + '\\train_data.xlsx', index=False)
-test_df.to_excel(EXCEL_FOLDER + '\\test_data.xlsx', index=False)
-

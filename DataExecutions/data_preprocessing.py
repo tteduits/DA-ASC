@@ -3,8 +3,7 @@ from pathlib import Path
 import os
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
-from DataFunctions.pdf_read_functions import process_row_reading
-from DataFunctions.clean_transform_data import lemmatize_text, perform_tf_idf
+from DataFunctions.text_functions import process_row_reading
 from main import EXCEL_FOLDER
 
 
@@ -30,13 +29,5 @@ with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
         combined_data.loc[index, 'clean_text'] = clean_text
         combined_data.loc[index, 'full_text'] = full_text
 
-#
-combined_data.to_excel(EXCEL_FOLDER + "\\combined_data.xlsx", index=False)
-
-# # Lemmatization full text
-tqdm.pandas(desc="Lemmatizing")
-combined_data['lemma_text'] = combined_data['clean_text'].progress_apply(lemmatize_text)
 
 combined_data.to_excel(EXCEL_FOLDER + "\\combined_data.xlsx", index=False)
-
-# a = 1
