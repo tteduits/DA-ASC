@@ -4,11 +4,12 @@ import nlpaug.augmenter.char as nac
 import nltk
 import concurrent.futures
 import os
+from tqdm import tqdm
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 data = pd.read_excel(EXCEL_FOLDER + '\\train_data.xlsx')
-positive_negative_df = data[data['sentiment'] != 1].head(10)
+positive_negative_df = data[data['sentiment'] != 2]
 
 
 german_stopwords = stopwords.words('german')
@@ -27,10 +28,12 @@ def process_row(row):
 with concurrent.futures.ThreadPoolExecutor(os.cpu_count()) as executor:
     future_to_row = {executor.submit(process_row, row): row for _, row in positive_negative_df.iterrows()}
 
-    for future in concurrent.futures.as_completed(future_to_row):
-        ka_list.append(future.result())
+    with tqdm(total=len(future_to_row)) as pbar:
+        for future in concurrent.futures.as_completed(future_to_row):
+            ka_list.append(future.result())
+            pbar.update(1)
 
 ka_df = pd.DataFrame(ka_list)
 
-ka_df.to_excel(EXCEL_FOLDER + '\\ka_train_data.xlsx')
+ka_df.to_excel(EXCEL_FOLDER + '\\KA\\ka_train_data.xlsx', index=False)
 a = 1

@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 
 data = pd.read_excel(EXCEL_FOLDER + '\\train_data.xlsx')
-positive_negative_df = data[data['sentiment'] != 1]
+positive_negative_df = data[data['sentiment'] != 2]
 
 model_name_ge_en = 'Helsinki-NLP/opus-mt-de-en'
 model_name_en_ge = 'Helsinki-NLP/opus-mt-en-de'
@@ -43,20 +43,28 @@ def start_parallelization(df, model, tokenizer, model_bt, tokenizer_bt, excel_fi
             results.append(result)
 
     result_df = pd.DataFrame(results)
-    result_df.to_excel(EXCEL_FOLDER + excel_file)
+    result_df.to_excel(EXCEL_FOLDER + excel_file, index=False)
 
 
-NUM_CHUNKS = 5
+NUM_CHUNKS = 20
 df_chunks = np.array_split(positive_negative_df, NUM_CHUNKS)
 
-for i, chunk in enumerate(df_chunks):
-    start_parallelization(chunk, model_ge_cz, tokenizer_ge_cz, model_cz_ge, tokenizer_cz_ge,
-                          '\\BT\\train_data_cz_ge_' + str(i) + '.xlsx')
-    print(f'Dataframe Czech number {i} created')
+a = 1
+num_chunks = len(df_chunks)
 
-for i, chunk in enumerate(df_chunks):
+for i, chunk in enumerate((df_chunks)):
+    if i not in [7,8]:
+        continue
+    # Calculate the index in original order
+    print(i)
+    # Perform your processing here
     start_parallelization(chunk, model_ge_en, tokenizer_ge_en, model_en_ge, tokenizer_en_ge,
                           '\\BT\\train_data_en_ge_' + str(i) + '.xlsx')
     print(f'Dataframe English number {i} created')
 
-a = 1
+# for i, chunk in enumerate(reversed(df_chunks)):
+#     original_index = num_chunks - 1 - i
+#
+#     start_parallelization(chunk, model_ge_cz, tokenizer_ge_cz, model_cz_ge, tokenizer_cz_ge,
+#                           '\\BT\\train_data_cz_ge_' + str(original_index) + '.xlsx')
+#     print(f'Dataframe Czech number {original_index} created')

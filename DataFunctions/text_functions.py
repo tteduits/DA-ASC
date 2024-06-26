@@ -1,6 +1,5 @@
 import fitz
 import difflib
-from nltk.translate.bleu_score import sentence_bleu
 import torch
 import numpy as np
 from scipy.stats import beta
@@ -9,6 +8,7 @@ import random
 import string
 import nltk
 from nltk.corpus import stopwords
+from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from py_openthesaurus import OpenThesaurusWeb
 import time
 import spacy
@@ -83,13 +83,13 @@ def process_row_reading(row):
     return clean_text, full_text
 
 
-def translate_long_text(text, max_length, model, tokenizer):
+def translate_long_text(text, max_length, model, tokenizer, beam):
     segments = make_parts_text(text, max_length)
 
     translated_segments = []
     for segment in segments:
         inputs = tokenizer(segment, return_tensors="pt", padding=True, truncation=True, max_length=max_length)
-        translated = model.generate(**inputs)
+        translated = model.generate(**inputs, num_beams=beam, num_return_sequences=1, do_sample=True)
         translated_text = tokenizer.decode(translated[0], skip_special_tokens=True)
         translated_segments.append(translated_text)
 
@@ -117,11 +117,17 @@ def make_parts_text(text, max_length):
 
 
 def process_row_parallel_bt(row, model, tokenizer, model_bt, tokenizer_bt):
+
     text = row['clean_text']
-    translated_text = translate_long_text(text, 512, model, tokenizer)
-    bt_text = translate_long_text(translated_text, 512, model_bt, tokenizer_bt)
+
+    translated_text = translate_long_text(text, 512, model, tokenizer, 5)
+    bt_text = translate_long_text(translated_text, 512, model_bt, tokenizer_bt, 1)
+
     bt_text = re.sub(r'\.{2,}', '.', bt_text)
-    bleu_score = sentence_bleu([text.split()], bt_text.split())
+
+    reference = nltk.word_tokenize(text)
+    candidate = nltk.word_tokenize(bt_text)
+    bleu_score = sentence_bleu([reference], candidate, weights=(0.25, 0.25, 0.25, 0.25))
 
     return {
         'aspect': row['aspect'],
@@ -261,14 +267,14 @@ def find_synonyms(find_word, calls, start_time):
     end_time = time.time()
 
     if calls == 60 and end_time - start_time < 60:
-        print('while started')
         while end_time - start_time < 64:
             end_time = time.time()
-        print('we start again')
         start_time = time.time()
         calls = 0
 
     lemma = nlp(find_word)[0].lemma_
+    if lemma.isnumeric():
+        return [], lemma.lower(), calls, start_time
 
     synonyms = open_thesaurus.get_synonyms(word=lemma, form='long')
 

@@ -9,7 +9,7 @@ import os
 
 
 train_data = pd.read_excel(EXCEL_FOLDER + '\\train_data.xlsx')
-positive_negative_df = train_data[train_data['sentiment'] != 1].reset_index()
+positive_negative_df = train_data[train_data['sentiment'] != 2].reset_index()
 
 unique_aspects = positive_negative_df['aspect'].unique()
 list_df_per_aspect = [(positive_negative_df[positive_negative_df['aspect'] == aspect]).head(2) for aspect in unique_aspects]

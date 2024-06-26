@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-data = pd.read_excel(EXCEL_FOLDER +'\\raw_output.xlsx')
+data = pd.read_excel("C:\\Users\\tijst\\OneDrive\\Bureaublad\\DataMasterThesis\\Excel\\raw_output.xlsx")
 data['sentiment'] = data['sentiment'].map({
     0: "negativ",
     1: "leicht negativ",
@@ -12,7 +12,7 @@ data['sentiment'] = data['sentiment'].map({
     4: "positiv"}
 )
 
-data['sentiment'] = data['sentiment'].replace({'negativ': 0, 'leicht negativ': 0, 'ausgeglichen': 1, 'positiv': 2, 'leicht positiv': 2})
+data['sentiment'] = data['sentiment'].replace({'negativ': 0, 'leicht negativ': 1, 'ausgeglichen': 2, 'positiv': 3, 'leicht positiv': 4})
 THEME_MAPPINGS = {
     0: "Ländliche Entwicklung, Digitale Innovation",
     1: "Lebensmittelsicherheit, Tiergesundheit",
