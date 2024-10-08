@@ -11,7 +11,7 @@ To enhance the model's performance and robustness, the following data augmentati
 
 - **Back Translation (BT)**: Translating the text into another language and then back to the original language to generate paraphrases.
 - **Keyboard Augmentation (KA)**: Introducing variations by simulating common typing errors.
-- **Easy Data Augmentation (EDA)**: Utilizing techniques such as synonym replacement and random insertion to create diverse training examples.
+- **Easy Data Augmentation (EDA)**: Utilizing techniques such as synonym replacement, random swap, random deletion, and random insertion to create diverse training examples.
 - **Mixup**: Creating synthetic examples by blending two instances together.
 
 ## Model Training
