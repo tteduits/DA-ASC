@@ -15,7 +15,7 @@ To enhance the model's performance and robustness, the following data augmentati
 - **Mixup**: Creating synthetic examples by blending two instances together.
 
 ## Model Training
-For the classification task, I have fine-tuned both **BERT** and **RoBERTa** models to achieve accurate sentiment predictions for each aspect in the reviews.
+For the classification task, we have fine-tuned both **BERT** and **RoBERTa** models to achieve accurate sentiment predictions for each aspect in the reviews.
 
 ## SemEval Folder
 The **SemEval** folder contains the code necessary to:
