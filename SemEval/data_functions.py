@@ -22,7 +22,7 @@ tokenizer_en_ge = MarianTokenizer.from_pretrained(model_name_en_ge)
 model_en_ge = MarianMTModel.from_pretrained(model_name_en_ge)
 
 stop_words = set(stopwords.words('english'))
-PERCENTAGE_TO_CHANGE = 0.10
+PERCENTAGE_TO_CHANGE = 0.138
 
 
 def bt_translate_text(df, beam1, beam2):
