@@ -17,3 +17,9 @@ To enhance the model's performance and robustness, the following data augmentati
 ## Model Training
 For the classification task, I have fine-tuned both **BERT** and **RoBERTa** models to achieve accurate sentiment predictions for each aspect in the reviews.
 
+## SemEval Folder
+The **SemEval** folder contains the code necessary to:
+- Apply data augmentation techniques.
+- Fine-tune the models in Google Colab.
+- Obtain and analyze the results of the different models.
+- Generate descriptive statistics of the dataset.
