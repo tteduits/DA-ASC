@@ -23,3 +23,6 @@ The **SemEval** folder contains the code necessary to:
 - Fine-tune the models in Google Colab.
 - Obtain and analyze the results of the different models.
 - Generate descriptive statistics of the dataset.
+
+
+Please note that the code developed for attempting ASC on German news articles during the thesis internship is **not included** in this repository, as it was not a viable project.
