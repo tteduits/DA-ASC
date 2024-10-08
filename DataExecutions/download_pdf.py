@@ -43,17 +43,17 @@ if CHECK_COORDINATES:
 if not CHECK_COORDINATES:
 
     for csv_number in range(43, 44):
-        url_df = pd.read_excel(PDF_LINKS_EXCEL + 'pdf_file_' + str(csv_number) + '.xlsx')
-        data_combined = pd.read_excel(EXCEL_FOLDER + 'CombinedData\\combined_data' + str(csv_number) + '.xlsx')
+        url_df = pd.read_excel("C:\\Users\\tijst\\OneDrive\Bureaublad\\DataMasterThesis\\Excel\\PDF_files\\pdf_file0.xlsx")
+
         # Random click in python (needed)
-        pyautogui.moveTo(451, 215)
-        pyautogui.click(451, 215)
+        pyautogui.moveTo(2523, 328)
+        pyautogui.click(2523, 328)
 
-        for col in range(2, 3):
-            x = 2480 + col * 84
+        for col in range(len(url_df.columns)):
+            x = 2468 + col * 67
 
-            for row in range(15,16):
-                y = 378 + 25 * row
+            for row in range(1):
+                y = 484 + 20 * row
 
                 pyautogui.moveTo(x, y)
                 pyautogui.click(x, y)
@@ -61,26 +61,26 @@ if not CHECK_COORDINATES:
                 pyautogui.click(x, y)
                 time.sleep(1)
 
-                url_link = url_df.iloc[row, col]
-                found = False
-                while not found:
-                    for index, row_items in data_combined.iterrows():
-                        most_recent_download_path = max((os.path.join(os.path.expanduser("~/Downloads"), f) for f in os.listdir(os.path.expanduser("~/Downloads")) if os.path.isfile(os.path.join(os.path.expanduser("~/Downloads"), f))), key=os.path.getmtime)
-                        if 'pdf' not in most_recent_download_path:
-                            break
-                        if row_items['URL'] == url_link:
-                            shutil.move(most_recent_download_path, EXTERNAL_DISK)
-                            filename = os.path.basename(most_recent_download_path)
-                            new_filename = url_link.split("clips/", 1)[-1] if "clips/" in url_link else ""
-                            new_filepath = os.path.join(EXTERNAL_DISK, new_filename)
-                            os.rename(os.path.join(EXTERNAL_DISK, filename), new_filepath)
-
-                            found = True
-
-                            break
+                # url_link = url_df.iloc[row, col]
+                # found = False
+                # while not found:
+                #     for index, row_items in data_combined.iterrows():
+                #         most_recent_download_path = max((os.path.join(os.path.expanduser("~/Downloads"), f) for f in os.listdir(os.path.expanduser("~/Downloads")) if os.path.isfile(os.path.join(os.path.expanduser("~/Downloads"), f))), key=os.path.getmtime)
+                #         if 'pdf' not in most_recent_download_path:
+                #             break
+                #         if row_items['URL'] == url_link:
+                #             shutil.move(most_recent_download_path, EXTERNAL_DISK)
+                #             filename = os.path.basename(most_recent_download_path)
+                #             new_filename = url_link.split("clips/", 1)[-1] if "clips/" in url_link else ""
+                #             new_filepath = os.path.join(EXTERNAL_DISK, new_filename)
+                #             os.rename(os.path.join(EXTERNAL_DISK, filename), new_filepath)
+                #
+                #             found = True
+                #
+                #             break
             print('This is col: ' + str(col))
 
-        pyautogui.click(5563, 29)
+        # pyautogui.click(5563, 29)
 
         time.sleep(1)
         print('This is csv number : ' + str(csv_number))
