@@ -116,7 +116,7 @@ def map_label(label_value):
 
 
 column_labels = ['accuracy', 'precision_micro', 'recall_micro', 'f1_micro', 'f1_macro']
-models = ['mixup']
+models = ['', 'mixup', 'eda1', 'bt1', 'ka1', 'eda2', 'bt2', 'ka2','eda3', 'bt3', 'ka3', 'eda4', 'bt4', 'ka4']
 
 alpha_values = [0.1, 0.2, 0.3, 0.4]
 
