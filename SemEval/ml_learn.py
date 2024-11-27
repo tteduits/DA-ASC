@@ -10,7 +10,7 @@ import random
 
 random.seed(42)
 MAX_POSITION_EMBEDDING = 512
-MODEL_NAME = 'google-bert/bert-base-uncased'
+MODEL_NAME =
 MIX_UP = True
 
 # neutral_sentiment_data = train_data[train_data['sentiment'] == 1]
@@ -169,8 +169,8 @@ for model_type in reversed(models):
             train_dataset = train_dataset.to_dict(orient='list')
             train_dataset = Dataset.from_dict(train_dataset)
 
-            lr = 3e-6
-            weight = 0.01
+            lr = 
+            weight =
             best_accuracy = 0.0
             best_lr = None
             best_weight = None
